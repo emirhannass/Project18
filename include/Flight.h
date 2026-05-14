@@ -1,16 +1,20 @@
 #ifndef FLIGHT_H
 #define FLIGHT_H
 
-#include <string>
-#include <vector>
+#include "LinkedList.h"
 
 struct Flight {
-    std::string id;         // Örn: "FL100" [cite: 38]
-    std::string from;       // Kalkış havaalanı [cite: 38]
-    std::string to;         // Varış havaalanı [cite: 38]
-    std::string depart;     // Kalkış zamanı (ISO 8601 formatında) [cite: 38]
-    std::string arrive;     // Varış zamanı (ISO 8601 formatında) [cite: 38]
-    std::string aircraft;   // Uçak tipi (A320, B737 vb.) [cite: 38, 42]
+    MyString id;     
+    MyString from;    
+    MyString to;      
+    MyString depart;   
+    MyString arrive;  
+    MyString aircraft;
+
+    Flight() {}
+
+    Flight(MyString _id, MyString _from, MyString _to, MyString _dep, MyString _arr, MyString _air)
+        : id(_id), from(_from), to(_to), depart(_dep), arrive(_arr), aircraft(_air) {}
 };
 
 #endif
