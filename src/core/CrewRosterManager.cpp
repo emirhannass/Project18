@@ -6,6 +6,7 @@
  */
 
 #include "core/CrewRosterManager.h"
+#include "core/PairingGenerator.h"
 #include <iostream>
 
 namespace core {
@@ -28,40 +29,56 @@ bool CrewRosterManager::isCrewQualified(const Crew& crew, const std::string& air
 }
 
 void CrewRosterManager::generateRoster() {
-    // Kıdem bazlı eşleştirme için basit bir sıralama mantığıyla (Seniority öncelikli)
-    // her bir uçuş serisi (Pairing) oluşturulur ve uygun ekibe atanır.
-    int pairingCounter = 1;
+    PairingGenerator generator;
+    // 1. Aşama: Uçuşları birbirine bağlayarak yasal Pairing'leri üret
+    data_structures::LinkedList<Pairing> validPairings = generator.generateValidPairings(all_flights);
 
-    for (const auto& flight : all_flights) {
+    // Zaten atanmış olan ekip ID'lerini hafızada tutmak için kendi LinkedList yapımız
+    data_structures::LinkedList<std::string> assignedCrewIds;
+
+    // 2. Aşama: Üretilen bu hazır pairing zincirlerine en uygun ekipleri ata
+    for (auto& pairing : validPairings) {
+        if (pairing.flights.isEmpty()) continue;
+
         Crew* bestCandidate = nullptr;
+        Flight firstFlight = pairing.flights.get(0); // Zincirin ilk uçuşu
 
         for (auto& crew : all_crew) {
-            // Kural 1: Uçağa kalifikasyonu var mı? [cite: 2124, 2133]
-            if (!isCrewQualified(crew, flight.aircraft_type)) {
+            // KURAL 1: Üs Kontrolü (Ekibin üssü ile zincirin başlangıç meydanı uyuşmalı)
+            if (crew.base != firstFlight.from_airport) {
                 continue;
             }
 
-            // Kural 2: Üs eşleşmesi var mı? [cite: 2125]
-            if (crew.base != flight.from_airport) {
+            // KURAL 2: Kalifikasyon Kontrolü (Uçağa ehliyeti var mı?)
+            if (!isCrewQualified(crew, firstFlight.aircraft_type)) {
                 continue;
             }
 
-            // Kural 3: Kıdem önceliği kontrolü (Seniority-based bidding) [cite: 2126, 2146]
+            // KURAL 3: Çift Atama Engelleme (Bu ekip üyesi başka bir uçuş zincirine atanmış mı?)
+            bool alreadyAssigned = false;
+            for (int k = 0; k < assignedCrewIds.getSize(); ++k) {
+                if (assignedCrewIds.get(k) == crew.id) {
+                    alreadyAssigned = true;
+                    break;
+                }
+            }
+            if (alreadyAssigned) {
+                continue; // Ekip meşgulse sonraki adaya geç
+            }
+
+            // KURAL 4: Kıdem (Seniority) Önceliği
             if (bestCandidate == nullptr || crew.seniority > bestCandidate->seniority) {
                 bestCandidate = &crew;
             }
         }
 
-        // Eğer uygun ekip bulunduysa Pairing nesnesi oluşturulup takvime eklenir
+        // Uygun ve boşta ekip bulunduysa ata ve nihai takvime ekle
         if (bestCandidate != nullptr) {
-            Pairing newPairing;
-            newPairing.id = "PA" + std::to_string(pairingCounter++);
-            newPairing.assigned_crew_id = bestCandidate->id;
-            newPairing.flights.add(flight);
-            
-            final_schedule.add(newPairing);
+            pairing.assigned_crew_id = bestCandidate->id;
+            assignedCrewIds.add(bestCandidate->id); // Bu ekibi artık meşgul listesine ekle
+            final_schedule.add(pairing);
         } else {
-            std::cout << "[UYARI] " << flight.id << " ucusu icin uygun yetkinlikte bos ekip bulunamadi!\n";
+            std::cout << "[UYARI] " << pairing.id << " rotasi icin uygun bosta ekip bulunamadi!\n";
         }
     }
 }
@@ -87,4 +104,4 @@ void CrewRosterManager::printReport() const {
     }
 }
 
-} // namespace core
+}// namespace core
