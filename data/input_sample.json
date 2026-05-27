@@ -1,0 +1,20 @@
+{
+  "flights": [
+    {"id": "FL100", "from": "IST", "to": "ESB", "depart": "2026-04-01T08:00", "arrive": "2026-04-01T09:15", "aircraft": "A320"},
+    {"id": "FL101", "from": "ESB", "to": "ADB", "depart": "2026-04-01T10:30", "arrive": "2026-04-01T11:45", "aircraft": "A320"},
+    {"id": "FL102", "from": "ADB", "to": "IST", "depart": "2026-04-01T14:00", "arrive": "2026-04-01T15:20", "aircraft": "B737"},
+    {"id": "FL103", "from": "IST", "to": "ADB", "depart": "2026-04-02T07:00", "arrive": "2026-04-02T08:20", "aircraft": "A320"},
+    {"id": "FL104", "from": "ADB", "to": "ESB", "depart": "2026-04-02T10:00", "arrive": "2026-04-02T11:30", "aircraft": "B737"}
+  ],
+  "crew": [
+    {"id": "CR01", "role": "captain", "base": "IST", "qualifications": ["A320", "B737"], "seniority": 15},
+    {"id": "CR02", "role": "captain", "base": "IST", "qualifications": ["A320"], "seniority": 8},
+    {"id": "CR03", "role": "first_officer", "base": "ESB", "qualifications": ["A320", "B737"], "seniority": 5},
+    {"id": "CR04", "role": "first_officer", "base": "IST", "qualifications": ["B737"], "seniority": 3}
+  ],
+  "regulations": {
+    "max_duty_hours": 12,
+    "min_rest_hours": 10,
+    "max_flight_hours_monthly": 100
+  }
+}
