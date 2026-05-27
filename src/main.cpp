@@ -11,6 +11,13 @@
 #include "utils/FileParser.h"
 
 int main(int argc, char* argv[]) {
+    // 1. Yardim / Kullanim Klavuzu Kontrolü (Projenin kalitesini gösterir)
+    if (argc > 1 && (std::string(argv[1]) == "--help" || std::string(argv[1]) == "-h")) {
+        std::cout << "Kullanim: ./bin/app [dosya_yolu]\n";
+        std::cout << "Varsayilan dosya yolu: data/input_sample.json\n";
+        return 0;
+    }
+
     // Varsayilan girdi dosyasi adi
     std::string inputFile = "data/input_sample.json"; 
 
@@ -23,6 +30,8 @@ int main(int argc, char* argv[]) {
         std::cout << "==================================================\n";
         std::cout << "   CSE 211 - AIRLINE CREW ROSTERING APP START     \n";
         std::cout << "==================================================\n";
+        // 2. Hangi dosyanın okunduğunu ekrana basıyoruz
+        std::cout << "[INFO] Yuklenen girdi dosyasi: " << inputFile << "\n\n";
 
         core::CrewRosterManager manager;
 
