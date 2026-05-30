@@ -1,5 +1,12 @@
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall -Wextra -Iinclude
+DOXYGEN = doxygen
+
+ifeq ($(OS),Windows_NT)
+    ifeq ($(shell where doxygen 2>NUL),)
+        DOXYGEN = "C:/Program Files/doxygen/bin/doxygen.exe"
+    endif
+endif
 
 # Klasör Yapısı
 BUILD_DIR = build
@@ -98,7 +105,8 @@ deps:
 
 docs:
 	@echo "[DOCS] Doxygen dokumantasyonu uretiliyor..."
-	@doxygen Doxyfile 2>/dev/null || echo "[WARNING] Doxyfile bulunamadi. Dokumantasyon olusturmak icin proje ana dizinine bir Doxyfile eklemelisiniz."
+	$(DOXYGEN) Doxyfile
+	@echo "[SUCCESS] Dokumantasyon docs/doxygen/html/index.html konumuna uretildi."
 
 # Tam Temizlik Kuralı
 clean:

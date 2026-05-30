@@ -1,0 +1,7 @@
+# Derleme ve Geçici Klasörler
+bin/
+build/
+NUL
+
+# Otomatik Üretilen Dokümantasyon klasörü
+docs/doxygen/
