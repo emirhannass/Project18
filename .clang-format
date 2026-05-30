@@ -1,0 +1,29 @@
+# CSE 211 Term Project - ClangFormat Configuration
+BasedOnStyle: LLVM
+Language: Cpp
+
+# Girintileme ve Satır Kuralları
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+ColumnLimit: 100
+
+# Parantez Hizalama Kuralları (Readable & Clean)
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterClass: true
+  AfterControlStatement: Never
+  AfterEnum: true
+  AfterFunction: true
+  AfterNamespace: Never
+  AfterStruct: true
+  BeforeElse: false
+  BeforeCatch: false
+
+# Boşluk ve Düzenlemeler
+PointerAlignment: Left
+SpaceAfterCStyleCast: true
+SpaceBeforeParens: ControlStatements
+SpacesInContainerLiterals: false
+AllowShortFunctionsOnASingleLine: None
+KeepEmptyLinesAtTheStartOfBlocks: false

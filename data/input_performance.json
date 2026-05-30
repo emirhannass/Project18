@@ -1,0 +1,16 @@
+{
+  "flights": [
+    {"id": "FL_PERF_01", "from": "IST", "to": "ESB", "depart": "2026-04-01T06:00", "arrive": "2026-04-01T07:15", "aircraft": "A320"},
+    {"id": "FL_PERF_02", "from": "ESB", "to": "ADB", "depart": "2026-04-01T08:00", "arrive": "2026-04-01T09:20", "aircraft": "A320"},
+    {"id": "FL_PERF_03", "from": "ADB", "to": "IST", "depart": "2026-04-01T10:30", "arrive": "2026-04-01T12:00", "aircraft": "A320"},
+    {"id": "FL_PERF_04", "from": "IST", "to": "AYT", "depart": "2026-04-01T13:00", "arrive": "2026-04-01T14:15", "aircraft": "B737"},
+    {"id": "FL_PERF_05", "from": "AYT", "to": "IST", "depart": "2026-04-01T15:30", "arrive": "2026-04-01T16:50", "aircraft": "B737"},
+    {"id": "FL_PERF_06", "from": "IST", "to": "ESB", "depart": "2026-04-01T18:00", "arrive": "2026-04-01T19:15", "aircraft": "A320"},
+    {"id": "FL_PERF_07", "from": "ESB", "to": "IST", "depart": "2026-04-01T20:00", "arrive": "2026-04-01T21:15", "aircraft": "A320"}
+  ],
+  "crew": [
+    {"id": "CR_PERF_01", "role": "captain", "base": "IST", "seniority": 15, "qualifications": ["A320", "B737"]},
+    {"id": "CR_PERF_02", "role": "fo", "base": "IST", "seniority": 5, "qualifications": ["A320"]},
+    {"id": "CR_PERF_03", "role": "cabin", "base": "IST", "seniority": 8, "qualifications": ["A320", "B737"]}
+  ]
+}
