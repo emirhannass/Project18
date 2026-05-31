@@ -99,26 +99,26 @@ std::string CrewRosterManager::getRosterAsJson() const {
     std::string json = "[";
     bool first = true;
 
-    for (const auto& pairing : final_schedule) {
-        if (!first) {
-            json += ", ";
-        }
+    for (int i = 0; i < final_schedule.getSize(); ++i) {
+        const auto& pairing = final_schedule.get(i);
+        if (!first) json += ", ";
         
         json += "{";
-        json += "\"pairingId\": \"📦 " + pairing.id + "\", ";
+        json += "\"pairingId\": \"" + pairing.id + "\", ";
         json += "\"crew\": \"" + pairing.assigned_crew_id + "\", ";
         json += "\"flights\": [";
         
         bool firstFlight = true;
-        for (const auto& flight : pairing.flights) {
-            if (!firstFlight) {
-                json += ", ";
-            }
+        for (int j = 0; j < pairing.flights.getSize(); ++j) {
+            const auto& flight = pairing.flights.get(j);
+            if (!firstFlight) json += ", ";
             json += "{";
             json += "\"flightId\": \"" + flight.id + "\", ";
             json += "\"from\": \"" + flight.from_airport + "\", ";
             json += "\"to\": \"" + flight.to_airport + "\", ";
-            json += "\"aircraft\": \"" + flight.aircraft_type + "\"";
+            json += "\"aircraft\": \"" + flight.aircraft_type + "\", ";
+            json += "\"departTime\": \"" + flight.depart_time + "\", "; // Models.h ile eşitlendi
+            json += "\"arriveTime\": \"" + flight.arrive_time + "\"";   // Models.h ile eşitlendi
             json += "}";
             firstFlight = false;
         }
@@ -128,26 +128,27 @@ std::string CrewRosterManager::getRosterAsJson() const {
     }
     json += "]";
     return json;
-} 
+}
 
 std::string CrewRosterManager::getAllFlightsAsJson() const {
     std::string json = "[";
     bool first = true;
-    for (const auto& flight : all_flights) {
-        if (!first) {
-            json += ", ";
-        }
+    for (int i = 0; i < all_flights.getSize(); ++i) {
+        const auto& flight = all_flights.get(i);
+        if (!first) json += ", ";
         json += "{";
         json += "\"flightId\": \"" + flight.id + "\", ";
         json += "\"from\": \"" + flight.from_airport + "\", ";
         json += "\"to\": \"" + flight.to_airport + "\", ";
-        json += "\"aircraft\": \"" + flight.aircraft_type + "\"";
+        json += "\"aircraft\": \"" + flight.aircraft_type + "\", ";
+        json += "\"departTime\": \"" + flight.depart_time + "\", "; // Models.h ile eşitlendi
+        json += "\"arriveTime\": \"" + flight.arrive_time + "\"";   // Models.h ile eşitlendi
         json += "}";
         first = false;
     }
     json += "]";
     return json;
-} 
+}
 
 std::string CrewRosterManager::getAllCrewAsJson() const {
     std::string json = "[";
