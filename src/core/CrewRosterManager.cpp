@@ -30,31 +30,24 @@ bool CrewRosterManager::isCrewQualified(const Crew& crew, const std::string& air
 
 void CrewRosterManager::generateRoster() {
     PairingGenerator generator;
-    // 1. Aşama: Uçuşları birbirine bağlayarak yasal Pairing'leri üret
     data_structures::LinkedList<Pairing> validPairings = generator.generateValidPairings(all_flights);
-
-    // Zaten atanmış olan ekip ID'lerini hafızada tutmak için kendi LinkedList yapımız
     data_structures::LinkedList<std::string> assignedCrewIds;
 
-    // 2. Aşama: Üretilen bu hazır pairing zincirlerine en uygun ekipleri ata
     for (auto& pairing : validPairings) {
         if (pairing.flights.isEmpty()) continue;
 
         Crew* bestCandidate = nullptr;
-        Flight firstFlight = pairing.flights.get(0); // Zincirin ilk uçuşu
+        Flight firstFlight = pairing.flights.get(0);
 
         for (auto& crew : all_crew) {
-            // KURAL 1: Üs Kontrolü (Ekibin üssü ile zincirin başlangıç meydanı uyuşmalı)
             if (crew.base != firstFlight.from_airport) {
                 continue;
             }
 
-            // KURAL 2: Kalifikasyon Kontrolü (Uçağa ehliyeti var mı?)
             if (!isCrewQualified(crew, firstFlight.aircraft_type)) {
                 continue;
             }
 
-            // KURAL 3: Çift Atama Engelleme (Bu ekip üyesi başka bir uçuş zincirine atanmış mı?)
             bool alreadyAssigned = false;
             for (int k = 0; k < assignedCrewIds.getSize(); ++k) {
                 if (assignedCrewIds.get(k) == crew.id) {
@@ -63,19 +56,17 @@ void CrewRosterManager::generateRoster() {
                 }
             }
             if (alreadyAssigned) {
-                continue; // Ekip meşgulse sonraki adaya geç
+                continue;
             }
 
-            // KURAL 4: Kıdem (Seniority) Önceliği
             if (bestCandidate == nullptr || crew.seniority > bestCandidate->seniority) {
                 bestCandidate = &crew;
             }
         }
 
-        // Uygun ve boşta ekip bulunduysa ata ve nihai takvime ekle
         if (bestCandidate != nullptr) {
             pairing.assigned_crew_id = bestCandidate->id;
-            assignedCrewIds.add(bestCandidate->id); // Bu ekibi artık meşgul listesine ekle
+            assignedCrewIds.add(bestCandidate->id);
             final_schedule.add(pairing);
         } else {
             std::cout << "[UYARI] " << pairing.id << " rotasi icin uygun bosta ekip bulunamadi!\n";
@@ -104,4 +95,86 @@ void CrewRosterManager::printReport() const {
     }
 }
 
-}// namespace core
+std::string CrewRosterManager::getRosterAsJson() const {
+    std::string json = "[";
+    bool first = true;
+
+    for (const auto& pairing : final_schedule) {
+        if (!first) {
+            json += ", ";
+        }
+        
+        json += "{";
+        json += "\"pairingId\": \"📦 " + pairing.id + "\", ";
+        json += "\"crew\": \"" + pairing.assigned_crew_id + "\", ";
+        json += "\"flights\": [";
+        
+        bool firstFlight = true;
+        for (const auto& flight : pairing.flights) {
+            if (!firstFlight) {
+                json += ", ";
+            }
+            json += "{";
+            json += "\"flightId\": \"" + flight.id + "\", ";
+            json += "\"from\": \"" + flight.from_airport + "\", ";
+            json += "\"to\": \"" + flight.to_airport + "\", ";
+            json += "\"aircraft\": \"" + flight.aircraft_type + "\"";
+            json += "}";
+            firstFlight = false;
+        }
+        json += "]";
+        json += "}";
+        first = false;
+    }
+    json += "]";
+    return json;
+} 
+
+std::string CrewRosterManager::getAllFlightsAsJson() const {
+    std::string json = "[";
+    bool first = true;
+    for (const auto& flight : all_flights) {
+        if (!first) {
+            json += ", ";
+        }
+        json += "{";
+        json += "\"flightId\": \"" + flight.id + "\", ";
+        json += "\"from\": \"" + flight.from_airport + "\", ";
+        json += "\"to\": \"" + flight.to_airport + "\", ";
+        json += "\"aircraft\": \"" + flight.aircraft_type + "\"";
+        json += "}";
+        first = false;
+    }
+    json += "]";
+    return json;
+} 
+
+std::string CrewRosterManager::getAllCrewAsJson() const {
+    std::string json = "[";
+    bool first = true;
+    for (const auto& crew : all_crew) {
+        if (!first) {
+            json += ", ";
+        }
+        json += "{";
+        json += "\"crewId\": \"" + crew.id + "\", ";
+        json += "\"base\": \"" + crew.base + "\", ";
+        json += "\"qualifications\": [";
+        
+        bool firstQ = true;
+        for (const auto& q : crew.qualifications) {
+            if (!firstQ) {
+                json += ", ";
+            }
+            json += "\"" + q + "\"";
+            firstQ = false;
+        }
+        json += "]";
+        json += "}";
+        first = false;
+    }
+    json += "]";
+    return json;
+} 
+
+} // namespace core

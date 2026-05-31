@@ -27,6 +27,9 @@ public:
     void addCrew(const Crew& crew);
     void generateRoster();
     void printReport() const;
+    std::string getRosterAsJson() const;
+    std::string getAllFlightsAsJson() const;
+    std::string getAllCrewAsJson() const;
 
     const data_structures::LinkedList<Pairing>& getSchedule() const {
         return final_schedule;

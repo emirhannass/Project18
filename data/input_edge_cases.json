@@ -1,0 +1,44 @@
+{
+  "flights": [
+    {
+      "id": "FL_EDGE_01",
+      "from": "IST",
+      "to": "ESB",
+      "depart": "2026-04-01T08:00",
+      "arrive": "2026-04-01T09:15",
+      "aircraft": "A320"
+    },
+    {
+      "id": "FL_EDGE_02",
+      "from": "IST",
+      "to": "AYT",
+      "depart": "2026-04-01T08:30",
+      "arrive": "2026-04-01T09:45",
+      "aircraft": "A320"
+    },
+    {
+      "id": "FL_EDGE_03",
+      "from": "ESB",
+      "to": "ADB",
+      "depart": "2026-04-01T10:00",
+      "arrive": "2026-04-01T11:30",
+      "aircraft": "B737"
+    }
+  ],
+  "crew": [
+    {
+      "id": "CR_INVALID_QUAL",
+      "role": "captain",
+      "base": "IST",
+      "seniority": 3,
+      "qualifications": ["A330"]
+    },
+    {
+      "id": "CR_OVERLAP_TEST",
+      "role": "captain",
+      "base": "IST",
+      "seniority": 12,
+      "qualifications": ["A320"]
+    }
+  ]
+}
