@@ -2,36 +2,15 @@
 # CSE 211 - Data Structures Term Project
 # C++ Project Makefile
 # ============================================================================
-# Group ID:      [Your Group ID]
-# Members:       Emirhan [Your ID]
-# Problem:       Airline Crew Rostering System (PROJ-18)
+# Group ID:     [Your Group ID]
+# Members:      [Member Names and IDs]
+# Problem:      [Problem Number and Title]
 # ============================================================================
 
 # Compiler settings
 CXX := g++
 CXXFLAGS := -std=c++17 -Wall -Wextra -Wpedantic -g
 LDFLAGS :=
-
-# --- WEB ARAYÜZÜ (cpp-httplib) İÇİN PLATFORM BAZLI BAĞLANTILAR ---
-ifeq ($(OS),Windows_NT)
-    LDFLAGS += -lws2_32
-else
-    LDFLAGS += -pthread
-endif
-
-# --- DOXYGEN TAŞINABİLİRLİK AYARI ---
-DOXYGEN := doxygen
-ifeq ($(OS),Windows_NT)
-    ifneq ($(findstring sh,$(SHELL)),)
-        ifeq ($(shell command -v doxygen 2>/dev/null),)
-            DOXYGEN := "C:/Program Files/doxygen/bin/doxygen.exe"
-        endif
-    else
-        ifeq ($(shell where doxygen 2>nul),)
-            DOXYGEN := "C:/Program Files/doxygen/bin/doxygen.exe"
-        endif
-    endif
-endif
 
 # Directories
 SRC_DIR := src
@@ -156,12 +135,7 @@ deps:
 		curl -sL -o $(LIBS_DIR)/json.hpp \
 			https://github.com/nlohmann/json/releases/download/v3.11.3/json.hpp; \
 	fi
-	# cpp-httplib (header-only) - Web Arayüz Sunucusu İçin
-	@if [ ! -f $(LIBS_DIR)/httplib.h ]; then \
-		echo "Downloading cpp-httplib..."; \
-		curl -sL -o $(LIBS_DIR)/httplib.h \
-			https://raw.githubusercontent.com/yhirose/cpp-httplib/v0.15.3/httplib.h; \
-	fi
+	# Add more dependencies as needed
 	@echo "Dependencies installed."
 
 # ============================================================================
@@ -187,7 +161,7 @@ format-check:
 docs:
 	@echo "Generating documentation..."
 	@if [ -f $(DOCS_DIR)/Doxyfile ]; then \
-		$(DOXYGEN) $(DOCS_DIR)/Doxyfile; \
+		doxygen $(DOCS_DIR)/Doxyfile; \
 		echo "Documentation generated in $(DOCS_DIR)/html/"; \
 	else \
 		echo "Error: $(DOCS_DIR)/Doxyfile not found"; \
@@ -289,26 +263,26 @@ help:
 	@echo "==================================="
 	@echo ""
 	@echo "Build Targets:"
-	@echo "  make            Build main executable"
-	@echo "  make run        Build and run with default input"
-	@echo "  make test       Build and run tests"
-	@echo "  make debug      Build with debug flags and sanitizers"
-	@echo "  make release    Build optimized release version"
+	@echo "  make           Build main executable"
+	@echo "  make run       Build and run with default input"
+	@echo "  make test      Build and run tests"
+	@echo "  make debug     Build with debug flags and sanitizers"
+	@echo "  make release   Build optimized release version"
 	@echo ""
 	@echo "Quality Targets:"
-	@echo "  make memcheck   Run Valgrind memory check"
-	@echo "  make format     Format code with clang-format"
-	@echo "  make docs       Generate Doxygen documentation"
+	@echo "  make memcheck  Run Valgrind memory check"
+	@echo "  make format    Format code with clang-format"
+	@echo "  make docs      Generate Doxygen documentation"
 	@echo ""
 	@echo "Setup Targets:"
-	@echo "  make deps       Install/download dependencies"
+	@echo "  make deps      Install/download dependencies"
 	@echo ""
 	@echo "Utility Targets:"
-	@echo "  make clean      Remove build artifacts"
+	@echo "  make clean     Remove build artifacts"
 	@echo "  make distclean Remove all generated files"
-	@echo "  make submit     Create submission archive"
-	@echo "  make stats      Show project statistics"
-	@echo "  make help       Show this help"
+	@echo "  make submit    Create submission archive"
+	@echo "  make stats     Show project statistics"
+	@echo "  make help      Show this help"
 	@echo ""
 	@echo "Submission:"
 	@echo "  GROUP_ID=Group05 PROB_NUM=01 make submit"
